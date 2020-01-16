@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Free portable 2P tic tac toe game">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#145181">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn3.iconfinder.com/data/icons/essenstial-ultimate-ui/64/tic_tac_toe-512.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <title>Tic Tac Toe-A project made possible by NooberCong</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .App {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #263442;
+        }
+
+        html::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .table {
+            width: calc(80vh);
+            height: calc(80%);
+            display:  flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background-color: #fdcb6e;
+            align-content: space-between;
+        }
+
+        .right {
+            width: calc(100vw - 100vh - 20%);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .result-board {
+            width: 100%;
+            height: 60%;
+            box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            display: flex;
+            background-color: #1e2a35;
+            font-size: 1.5rem;
+            color: #ffeaa7;
+            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result-board .options {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .play-again-btn {
+            background-color: transparent;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid #fdcb6e;
+            font-size: 1.2rem;
+            font-family: cursive;
+            color: #f0f0f0;
+            margin-right: 1rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .result-board .mode i{
+            padding: 0 0 0 1rem;
+        }
+
+        .result-board .score {
+            font-size: 2rem;
+        }
+        
+        .square {
+            background-color: #263442;
+            cursor: pointer;
+            width: calc(calc(100% / 3) - 0.2rem);
+            height: calc(calc(100% / 3) - 0.2rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            font-family: 'Luckiest Guy', cursive;
+        }
+
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.1);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .brand {
+            width: 100%;
+            height: 15%;
+            text-align: center;
+        }
+
+        .brand span {
+            font-size: 4rem;
+            font-family: cursive;
+        }
+
+        .brand span:nth-child(1) {
+            color: #fc5185;
+        }
+
+        .brand span:nth-child(2) {
+            color: #43dde6;
+        }
+
+        .brand span:nth-child(3) {
+            color: #fdcb6e;
+        }
+
+        @keyframes fade {
+            0% {
+                opacity: 1;
+            }
+            25% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            75% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        /*Adding responsiveness*/
+        @media (max-width: 1200px) {
+            html {
+                font-size: 15px;
+            }
+            .right {
+                width: 30%;
+            }
+        }
+        @media (max-width: 1000px) {
+            html {
+                font-size: 15px;
+            }
+            .right {
+                width: 35%;
+            }
+        }
+        @media (max-width: 900px) {
+            html {
+                font-size: 14px;
+            }
+            .right {
+                width: 40%;
+            }
+        }
+        @media (max-width: 600px) {
+            html {
+                font-size: 12px;
+            }
+            .App {
+                height: auto;
+                flex-direction: column-reverse;
+            }
+            .table {
+                margin: 1rem 0;
+                width: 100%;
+                height: 100vw;
+            }
+            .right {
+                height: auto;
+                margin: 1rem 0;
+                width: 80%;
+            }
+
+            .right .result-board {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="App">
+        <div class="table">
+            <div class="square" id="00"></div>
+            <div class="square" id="01"></div>
+            <div class="square" id="02"></div>
+            <div class="square" id="10"></div>
+            <div class="square" id="11"></div>
+            <div class="square" id="12"></div>
+            <div class="square" id="20"></div>
+            <div class="square" id="21"></div>
+            <div class="square" id="22"></div>
+        </div>
+        <div class="right">
+            <div class="brand">
+                <span>Tic </span><span>Tac </span><span>Toe</span>
+            </div>
+            <div class="result-board">
+                <p>Player(X): </p><span class="score" id="X-score">0</span>
+                <p>Player(O): </p><span class="score" id="O-score">0</span>
+                <div class="options">
+                    <button class="play-again-btn">Play Again</button>
+                    <p class="mode">Switch Mode: <i class="fas fa-user-ninja"></i>2P</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener("load", () => {
+        let turn = 0;
+        let board = new Array(3);
+        let players = [{name: "X", score: 0}, {name: "O", score: 0}];
+        let finished = false;
+        const playAgainBtn = document.querySelector(".play-again-btn");
+        const resetBoard = (board) => {
+        for (let i = 0; i < 3; i++) {
+            board[i] = ['', '', ''];
+        }
+        }
+        resetBoard(board);
+        //check if there is a winner
+    const check = (startX, startY, board, dx, dy) => {
+        const start = board[startX][startY];
+        if (board[startX][startY] === '') {
+            return false;
+        }
+        for (let i = 0; i < 3; i ++) {
+            if (board[startX + i * dx][startY + i * dy] !== start) {
+                return false;
+            }
+        }
+        return true;
+    }
+    const someOneWins = (board) => {
+        //check rows and columns
+        for (let i = 0; i < 3; i++) {
+            if (check(0, i, board, 1, 0)) return {result: true, coords: [`0${i}`, `1${i}`, `2${i}`]};
+            if (check(i, 0, board, 0, 1)) return {result: true, coords: [`${i}0`, `${i}1`, `${i}2`]};
+        }
+        //check diagonals
+        if (check(0, 0, board, 1, 1)) return {result: true, coords: ['00', '11', '22']};
+        if (check(0, 2, board, 1, -1)) return {result: true, coords: ['02', '11', '20']};
+        return {result: false};
+    }
+    const squares = document.querySelectorAll(".square");
+    //make squares clickable
+    squares.forEach(sqrt => {
+    sqrt.addEventListener("click", () => {
+        const x = sqrt.getAttribute("id")[0];
+        const y =sqrt.getAttribute("id")[1];
+        if (!board[x][y] && !finished) {
+            let player = players[turn % 2];
+        sqrt.innerHTML = `<p>${player.name}</p>`;
+        sqrt.style.color = player.name === "X"? "#43dde6": "#fc5185";
+        const text = sqrt.firstChild;
+        text.style.animation = "0.2s ease scaleUp";
+        text.addEventListener('animationend', () => text.style.animation = "");
+        board[x][y] = player;
+        const gameState = someOneWins(board);
+        console.log(gameState);
+        if (gameState.result) {
+            gameState.coords.forEach(coord => {
+                const node = document.getElementById(coord).firstChild;
+                node.style.animation = "0.5s ease fade";
+                node.addEventListener('animationend', () => node.style.animation = '');
+            });
+            player.score += 1;
+            document.querySelector(`#${player.name}-score`).innerHTML = player.score;
+            finished = true;
+        }
+        else if (turn === 8) {
+            finished = true;
+        }
+        turn ++;
+        }
+    });
+    })
+    playAgainBtn.addEventListener('click', () => {
+        squares.forEach(sqrt => sqrt.innerHTML = "");
+        resetBoard(board);
+        if (finished) {
+            finished = false;
+            players.reverse();
+        }
+        turn = 0;
+    })
+    })
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+            })
+        }
+    </script>
+</body>
+</html>
