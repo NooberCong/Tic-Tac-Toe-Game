@@ -78,6 +78,10 @@
             outline: none;
         }
 
+        .result-board .mode {
+            cursor: pointer;
+        }
+
         .result-board .mode i{
             padding: 0 0 0 1rem;
         }
@@ -369,7 +373,7 @@ const minimax = (board, depth, isMaximizing) => {
 
         //if there is no winner, increment turn by 1
         turn ++;
-        if (player.name === "X" && !finished) {
+        if (player.name === "X" && !finished && AI_mode) {
             bestMove(board);
         }
         }
@@ -386,14 +390,24 @@ const minimax = (board, depth, isMaximizing) => {
             players.reverse();
         }
         turn = 0;
+    });
+    
+    //Enable changing mode between vs P and vs AI
+    let AI_mode = false;
+    const changeMode = document.querySelector(".mode");
+    changeMode.addEventListener("click", () => {
+        AI_mode = !AI_mode;
+        changeMode.innerHTML = AI_mode? "Switch Mode: <i class='fas fa-robot'></i>1P": "Switch Mode: <i class='fas fa-user-ninja'></i>2P";
+        playAgainBtn.click();
     })
+
     })
     </script>
     <script>
         //Register serviceWorker to cache and allow this app to work offline
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
+                navigator.serviceWorker.register('service-worker.js');
             })
         }
     </script>
