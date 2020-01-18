@@ -234,12 +234,79 @@
         let players = [{name: "X", score: 0}, {name: "O", score: 0}];
         let finished = false;
         const playAgainBtn = document.querySelector(".play-again-btn");
+        //Generate an empty 3 x 3 array/board
         const resetBoard = (board) => {
         for (let i = 0; i < 3; i++) {
             board[i] = ['', '', ''];
         }
         }
         resetBoard(board);
+
+    const bestMove = (board, turn) => {
+    console.log("calculating move");
+    let bestScore = -Infinity;
+    let move;
+    for (let x = 0; x < 3; x++) {
+        for (let y = 0; y < 3; y++) {
+            if (board[x][y] === '') {
+                board[x][y] = "O";
+                let score = minimax(board, 0, false, turn);
+                console.log(score, {x, y});
+                board[x][y] = '';
+                if (score > bestScore) {
+                    bestScore = score;
+                    move = {x: x, y: y};
+                }
+            }
+        }
+    }
+    let squareToPick = document.getElementById(`${move.x}${move.y}`);
+    squareToPick.click();
+}
+
+
+const minimax = (board, depth, isMaximizing) => {
+    if (
+        board.every(row => !row.includes(''))
+    ) {
+        return 0;
+    }
+    let hasWinner = someOneWins(board);
+    if (hasWinner.result) {
+        return hasWinner.player === "O"? 10 - depth: -10 + depth;
+    }
+
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                if (board[x][y] == '') {
+                    board[x][y] = "O";
+                    let score = minimax(board, depth + 1, false);
+                    board[x][y] = '';
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+        }
+        return bestScore;
+    }
+    else {
+        let bestScore = Infinity;
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                if (board[x][y] == '') {
+                    board[x][y] = "X";
+                    let score = minimax(board, depth + 1, true);
+                    board[x][y] = '';
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+        }
+        return bestScore;
+    }
+}
+
+
         //check if there is a winner
     const check = (startX, startY, board, dx, dy) => {
         const start = board[startX][startY];
@@ -253,23 +320,27 @@
         }
         return true;
     }
-    const someOneWins = (board) => {
+    const someOneWins = (board, turn, currPlayer) => {
         //check rows and columns
         for (let i = 0; i < 3; i++) {
-            if (check(0, i, board, 1, 0)) return {result: true, coords: [`0${i}`, `1${i}`, `2${i}`]};
-            if (check(i, 0, board, 0, 1)) return {result: true, coords: [`${i}0`, `${i}1`, `${i}2`]};
+            if (check(0, i, board, 1, 0)) return {result: true, coords: [`0${i}`, `1${i}`, `2${i}`], player: board[0][i]};
+            if (check(i, 0, board, 0, 1)) return {result: true, coords: [`${i}0`, `${i}1`, `${i}2`], player: board[i][0]};
         }
+
         //check diagonals
-        if (check(0, 0, board, 1, 1)) return {result: true, coords: ['00', '11', '22']};
-        if (check(0, 2, board, 1, -1)) return {result: true, coords: ['02', '11', '20']};
-        return {result: false};
+        if (check(0, 0, board, 1, 1)) return {result: true, coords: ['00', '11', '22'], player: board[0][0]};
+        if (check(0, 2, board, 1, -1)) return {result: true, coords: ['02', '11', '20'], player: board[0][2]};
+        return turn === 8? {result: "draw"}: {result: false};
     }
+
     const squares = document.querySelectorAll(".square");
+
     //make squares clickable
     squares.forEach(sqrt => {
     sqrt.addEventListener("click", () => {
         const x = sqrt.getAttribute("id")[0];
         const y =sqrt.getAttribute("id")[1];
+        //If a square is clicked, stop the player from interacting
         if (!board[x][y] && !finished) {
             let player = players[turn % 2];
         sqrt.innerHTML = `<p>${player.name}</p>`;
@@ -277,26 +348,36 @@
         const text = sqrt.firstChild;
         text.style.animation = "0.2s ease scaleUp";
         text.addEventListener('animationend', () => text.style.animation = "");
-        board[x][y] = player;
-        const gameState = someOneWins(board);
-        console.log(gameState);
+        board[x][y] = player.name;
+
+
+        //Check every move if there is a winner
+        const gameState = someOneWins(board, turn);
         if (gameState.result) {
-            gameState.coords.forEach(coord => {
+            //Get the squares that made up the winning line
+            if (gameState.result !== "draw") {
+                gameState.coords.forEach(coord => {
                 const node = document.getElementById(coord).firstChild;
                 node.style.animation = "0.5s ease fade";
                 node.addEventListener('animationend', () => node.style.animation = '');
-            });
-            player.score += 1;
-            document.querySelector(`#${player.name}-score`).innerHTML = player.score;
+                });
+                player.score += 1;
+                document.querySelector(`#${player.name}-score`).innerHTML = player.score;
+            }
             finished = true;
         }
-        else if (turn === 8) {
-            finished = true;
-        }
+
+        //if there is no winner, increment turn by 1
         turn ++;
+        if (player.name === "X" && !finished) {
+            bestMove(board);
+        }
         }
     });
     })
+
+
+    //Add Replay functionality
     playAgainBtn.addEventListener('click', () => {
         squares.forEach(sqrt => sqrt.innerHTML = "");
         resetBoard(board);
@@ -309,6 +390,7 @@
     })
     </script>
     <script>
+        //Register serviceWorker to cache and allow this app to work offline
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js')
