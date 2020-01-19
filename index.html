@@ -255,7 +255,6 @@
             if (board[x][y] === '') {
                 board[x][y] = "O";
                 let score = minimax(board, 0, false, turn);
-                console.log(score, {x, y});
                 board[x][y] = '';
                 if (score > bestScore) {
                     bestScore = score;
