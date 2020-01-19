@@ -386,6 +386,7 @@ const minimax = (board, depth, isMaximizing) => {
         resetBoard(board);
         if (finished) {
             finished = false;
+            //Change the starting player
             players.reverse();
         }
         turn = 0;
