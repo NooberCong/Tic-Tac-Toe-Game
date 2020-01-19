@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Free portable 2P tic tac toe game">
@@ -7,7 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="theme-color" content="#145181">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://cdn3.iconfinder.com/data/icons/essenstial-ultimate-ui/64/tic_tac_toe-512.png">
+    <link rel="apple-touch-icon"
+        href="https://cdn3.iconfinder.com/data/icons/essenstial-ultimate-ui/64/tic_tac_toe-512.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
     <title>Tic Tac Toe-A project made possible by NooberCong</title>
     <style>
@@ -15,7 +17,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .App {
             width: 100vw;
             height: 100vh;
@@ -28,11 +30,11 @@
         html::-webkit-scrollbar {
             display: none;
         }
-        
+
         .table {
             width: calc(80vh);
             height: calc(80%);
-            display:  flex;
+            display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             background-color: #fdcb6e;
@@ -82,14 +84,14 @@
             cursor: pointer;
         }
 
-        .result-board .mode i{
+        .result-board .mode i {
             padding: 0 0 0 1rem;
         }
 
         .result-board .score {
             font-size: 2rem;
         }
-        
+
         .square {
             background-color: #263442;
             cursor: pointer;
@@ -108,6 +110,7 @@
                 transform: scale(0.1);
                 opacity: 0;
             }
+
             to {
                 transform: scale(1);
                 opacity: 1;
@@ -141,57 +144,71 @@
             0% {
                 opacity: 1;
             }
+
             25% {
                 opacity: 0;
             }
+
             50% {
                 opacity: 1;
             }
+
             75% {
                 opacity: 0;
             }
+
             100% {
                 opacity: 1;
             }
         }
+
         /*Adding responsiveness*/
         @media (max-width: 1200px) {
             html {
                 font-size: 15px;
             }
+
             .right {
                 width: 30%;
             }
         }
+
         @media (max-width: 1000px) {
             html {
                 font-size: 15px;
             }
+
             .right {
                 width: 35%;
             }
         }
+
         @media (max-width: 900px) {
             html {
                 font-size: 14px;
             }
+
             .right {
                 width: 40%;
             }
         }
+
         @media (max-width: 600px) {
             html {
                 font-size: 12px;
             }
+
             .App {
                 height: auto;
                 flex-direction: column-reverse;
             }
+
             .table {
                 margin: 1rem 0;
                 width: 100%;
                 height: 100vw;
             }
+
             .right {
                 height: auto;
                 margin: 1rem 0;
@@ -204,6 +221,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="App">
         <div class="table">
@@ -233,175 +251,175 @@
     </div>
     <script>
         window.addEventListener("load", () => {
-        let turn = 0;
-        let board = new Array(3);
-        let players = [{name: "X", score: 0}, {name: "O", score: 0}];
-        let finished = false;
-        const playAgainBtn = document.querySelector(".play-again-btn");
-        //Generate an empty 3 x 3 array/board
-        const resetBoard = (board) => {
-        for (let i = 0; i < 3; i++) {
-            board[i] = ['', '', ''];
-        }
-        }
-        resetBoard(board);
-
-    const bestMove = (board, turn) => {
-    console.log("calculating move");
-    let bestScore = -Infinity;
-    let move;
-    for (let x = 0; x < 3; x++) {
-        for (let y = 0; y < 3; y++) {
-            if (board[x][y] === '') {
-                board[x][y] = "O";
-                let score = minimax(board, 0, false, turn);
-                board[x][y] = '';
-                if (score > bestScore) {
-                    bestScore = score;
-                    move = {x: x, y: y};
+            let turn = 0;
+            let board = new Array(3);
+            let players = [{ name: "X", score: 0 }, { name: "O", score: 0 }];
+            let finished = false;
+            const playAgainBtn = document.querySelector(".play-again-btn");
+            //Generate an empty 3 x 3 array/board
+            const resetBoard = (board) => {
+                for (let i = 0; i < 3; i++) {
+                    board[i] = ['', '', ''];
                 }
             }
-        }
-    }
-    let squareToPick = document.getElementById(`${move.x}${move.y}`);
-    squareToPick.click();
-}
+            resetBoard(board);
+
+            const bestMove = (board, turn) => {
+                console.log("calculating move");
+                let bestScore = -Infinity;
+                let move;
+                for (let x = 0; x < 3; x++) {
+                    for (let y = 0; y < 3; y++) {
+                        if (board[x][y] === '') {
+                            board[x][y] = "O";
+                            let score = minimax(board, 0, false, turn);
+                            board[x][y] = '';
+                            if (score > bestScore) {
+                                bestScore = score;
+                                move = { x: x, y: y };
+                            }
+                        }
+                    }
+                }
+                let squareToPick = document.getElementById(`${move.x}${move.y}`);
+                squareToPick.click();
+            }
 
 
-const minimax = (board, depth, isMaximizing) => {
-    if (
-        board.every(row => !row.includes(''))
-    ) {
-        return 0;
-    }
-    let hasWinner = someOneWins(board);
-    if (hasWinner.result) {
-        return hasWinner.player === "O"? 10 - depth: -10 + depth;
-    }
+            const minimax = (board, depth, isMaximizing) => {
+                if (
+                    board.every(row => !row.includes(''))
+                ) {
+                    return 0;
+                }
+                let hasWinner = someOneWins(board);
+                if (hasWinner.result) {
+                    return hasWinner.player === "O" ? 10 - depth : -10 + depth;
+                }
 
-    if (isMaximizing) {
-        let bestScore = -Infinity;
-        for (let x = 0; x < 3; x++) {
-            for (let y = 0; y < 3; y++) {
-                if (board[x][y] == '') {
-                    board[x][y] = "O";
-                    let score = minimax(board, depth + 1, false);
-                    board[x][y] = '';
-                    bestScore = Math.max(score, bestScore);
+                if (isMaximizing) {
+                    let bestScore = -Infinity;
+                    for (let x = 0; x < 3; x++) {
+                        for (let y = 0; y < 3; y++) {
+                            if (board[x][y] == '') {
+                                board[x][y] = "O";
+                                let score = minimax(board, depth + 1, false);
+                                board[x][y] = '';
+                                bestScore = Math.max(score, bestScore);
+                            }
+                        }
+                    }
+                    return bestScore;
+                }
+                else {
+                    let bestScore = Infinity;
+                    for (let x = 0; x < 3; x++) {
+                        for (let y = 0; y < 3; y++) {
+                            if (board[x][y] == '') {
+                                board[x][y] = "X";
+                                let score = minimax(board, depth + 1, true);
+                                board[x][y] = '';
+                                bestScore = Math.min(score, bestScore);
+                            }
+                        }
+                    }
+                    return bestScore;
                 }
             }
-        }
-        return bestScore;
-    }
-    else {
-        let bestScore = Infinity;
-        for (let x = 0; x < 3; x++) {
-            for (let y = 0; y < 3; y++) {
-                if (board[x][y] == '') {
-                    board[x][y] = "X";
-                    let score = minimax(board, depth + 1, true);
-                    board[x][y] = '';
-                    bestScore = Math.min(score, bestScore);
+
+
+            //check if there is a winner
+            const check = (startX, startY, board, dx, dy) => {
+                const start = board[startX][startY];
+                if (board[startX][startY] === '') {
+                    return false;
                 }
+                for (let i = 0; i < 3; i++) {
+                    if (board[startX + i * dx][startY + i * dy] !== start) {
+                        return false;
+                    }
+                }
+                return true;
             }
-        }
-        return bestScore;
-    }
-}
+            const someOneWins = (board, turn, currPlayer) => {
+                //check rows and columns
+                for (let i = 0; i < 3; i++) {
+                    if (check(0, i, board, 1, 0)) return { result: true, coords: [`0${i}`, `1${i}`, `2${i}`], player: board[0][i] };
+                    if (check(i, 0, board, 0, 1)) return { result: true, coords: [`${i}0`, `${i}1`, `${i}2`], player: board[i][0] };
+                }
 
-
-        //check if there is a winner
-    const check = (startX, startY, board, dx, dy) => {
-        const start = board[startX][startY];
-        if (board[startX][startY] === '') {
-            return false;
-        }
-        for (let i = 0; i < 3; i ++) {
-            if (board[startX + i * dx][startY + i * dy] !== start) {
-                return false;
+                //check diagonals
+                if (check(0, 0, board, 1, 1)) return { result: true, coords: ['00', '11', '22'], player: board[0][0] };
+                if (check(0, 2, board, 1, -1)) return { result: true, coords: ['02', '11', '20'], player: board[0][2] };
+                return turn === 8 ? { result: "draw" } : { result: false };
             }
-        }
-        return true;
-    }
-    const someOneWins = (board, turn, currPlayer) => {
-        //check rows and columns
-        for (let i = 0; i < 3; i++) {
-            if (check(0, i, board, 1, 0)) return {result: true, coords: [`0${i}`, `1${i}`, `2${i}`], player: board[0][i]};
-            if (check(i, 0, board, 0, 1)) return {result: true, coords: [`${i}0`, `${i}1`, `${i}2`], player: board[i][0]};
-        }
 
-        //check diagonals
-        if (check(0, 0, board, 1, 1)) return {result: true, coords: ['00', '11', '22'], player: board[0][0]};
-        if (check(0, 2, board, 1, -1)) return {result: true, coords: ['02', '11', '20'], player: board[0][2]};
-        return turn === 8? {result: "draw"}: {result: false};
-    }
+            const squares = document.querySelectorAll(".square");
 
-    const squares = document.querySelectorAll(".square");
-
-    //make squares clickable
-    squares.forEach(sqrt => {
-    sqrt.addEventListener("click", () => {
-        const x = sqrt.getAttribute("id")[0];
-        const y =sqrt.getAttribute("id")[1];
-        //If a square is clicked, stop the player from interacting
-        if (!board[x][y] && !finished) {
-            let player = players[turn % 2];
-        sqrt.innerHTML = `<p>${player.name}</p>`;
-        sqrt.style.color = player.name === "X"? "#43dde6": "#fc5185";
-        const text = sqrt.firstChild;
-        text.style.animation = "0.2s ease scaleUp";
-        text.addEventListener('animationend', () => text.style.animation = "");
-        board[x][y] = player.name;
+            //make squares clickable
+            squares.forEach(sqrt => {
+                sqrt.addEventListener("click", () => {
+                    const x = sqrt.getAttribute("id")[0];
+                    const y = sqrt.getAttribute("id")[1];
+                    //If a square is clicked, stop the player from interacting
+                    if (!board[x][y] && !finished) {
+                        let player = players[turn % 2];
+                        sqrt.innerHTML = `<p>${player.name}</p>`;
+                        sqrt.style.color = player.name === "X" ? "#43dde6" : "#fc5185";
+                        const text = sqrt.firstChild;
+                        text.style.animation = "0.2s ease scaleUp";
+                        text.addEventListener('animationend', () => text.style.animation = "");
+                        board[x][y] = player.name;
 
 
-        //Check every move if there is a winner
-        const gameState = someOneWins(board, turn);
-        if (gameState.result) {
-            //Get the squares that made up the winning line
-            if (gameState.result !== "draw") {
-                gameState.coords.forEach(coord => {
-                const node = document.getElementById(coord).firstChild;
-                node.style.animation = "0.5s ease fade";
-                node.addEventListener('animationend', () => node.style.animation = '');
+                        //Check every move if there is a winner
+                        const gameState = someOneWins(board, turn);
+                        if (gameState.result) {
+                            //Get the squares that made up the winning line
+                            if (gameState.result !== "draw") {
+                                gameState.coords.forEach(coord => {
+                                    const node = document.getElementById(coord).firstChild;
+                                    node.style.animation = "0.5s ease fade";
+                                    node.addEventListener('animationend', () => node.style.animation = '');
+                                });
+                                player.score += 1;
+                                document.querySelector(`#${player.name}-score`).innerHTML = player.score;
+                            }
+                            finished = true;
+                        }
+
+                        //if there is no winner, increment turn by 1
+                        turn++;
+                        if (player.name === "X" && !finished && AI_mode) {
+                            bestMove(board);
+                        }
+                    }
                 });
-                player.score += 1;
-                document.querySelector(`#${player.name}-score`).innerHTML = player.score;
-            }
-            finished = true;
-        }
-
-        //if there is no winner, increment turn by 1
-        turn ++;
-        if (player.name === "X" && !finished && AI_mode) {
-            bestMove(board);
-        }
-        }
-    });
-    })
+            })
 
 
-    //Add Replay functionality
-    playAgainBtn.addEventListener('click', () => {
-        squares.forEach(sqrt => sqrt.innerHTML = "");
-        resetBoard(board);
-        if (finished) {
-            finished = false;
-            //Change the starting player
-            players.reverse();
-        }
-        turn = 0;
-    });
-    
-    //Enable changing mode between vs P and vs AI
-    let AI_mode = false;
-    const changeMode = document.querySelector(".mode");
-    changeMode.addEventListener("click", () => {
-        AI_mode = !AI_mode;
-        changeMode.innerHTML = AI_mode? "Switch Mode: <i class='fas fa-robot'></i>1P": "Switch Mode: <i class='fas fa-user-ninja'></i>2P";
-        playAgainBtn.click();
-    })
+            //Add Replay functionality
+            playAgainBtn.addEventListener('click', () => {
+                squares.forEach(sqrt => sqrt.innerHTML = "");
+                resetBoard(board);
+                if (finished) {
+                    finished = false;
+                    //Change the starting player
+                    players.reverse();
+                }
+                turn = 0;
+            });
 
-    })
+            //Enable changing mode between vs P and vs AI
+            let AI_mode = false;
+            const changeMode = document.querySelector(".mode");
+            changeMode.addEventListener("click", () => {
+                AI_mode = !AI_mode;
+                changeMode.innerHTML = AI_mode ? "Switch Mode: <i class='fas fa-robot'></i>1P" : "Switch Mode: <i class='fas fa-user-ninja'></i>2P";
+                playAgainBtn.click();
+            })
+
+        })
     </script>
     <script>
         //Register serviceWorker to cache and allow this app to work offline
@@ -412,4 +430,5 @@ const minimax = (board, depth, isMaximizing) => {
         }
     </script>
 </body>
+
 </html>
