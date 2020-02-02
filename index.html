@@ -391,7 +391,7 @@
 
                         //if there is no winner, increment turn by 1
                         turn++;
-                        if (player.name === "X" && !finished && AI_mode) {
+                        if (player.name === players[0].name && !finished && AI_mode) {
                             bestMove(board);
                         }
                     }
