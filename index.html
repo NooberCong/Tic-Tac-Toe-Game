@@ -288,14 +288,12 @@
 
 
             const minimax = (board, depth, isMaximizing) => {
-                if (
-                    board.every(row => !row.includes(''))
-                ) {
-                    return 0;
-                }
                 let hasWinner = someOneWins(board);
                 if (hasWinner.result) {
                     return hasWinner.player === "O" ? 10 - depth : -10 + depth;
+                }
+                if (board.every(row => !row.includes(''))) {
+                    return 0;
                 }
 
                 if (isMaximizing) {
