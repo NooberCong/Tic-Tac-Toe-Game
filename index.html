@@ -6,7 +6,7 @@
     <meta name="description" content="Free portable 2P tic tac toe game">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="theme-color" content="#145181">
+    <meta name="theme-color" content="#6C63FF">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon"
         href="https://cdn3.iconfinder.com/data/icons/essenstial-ultimate-ui/64/tic_tac_toe-512.png">
@@ -24,7 +24,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            background-color: #263442;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
         }
 
         html::-webkit-scrollbar {
@@ -37,8 +37,10 @@
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            background-color: #fdcb6e;
+            background-color: #6C63FF;
             align-content: space-between;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(108, 99, 255, 0.5);
         }
 
         .right {
@@ -53,15 +55,16 @@
             font-family: cursive;
             width: 100%;
             height: 60%;
-            box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.5);
-            border-radius: 5px;
+            box-shadow: 0px 0px 20px rgba(108, 99, 255, 0.4);
+            border-radius: 12px;
             display: flex;
-            background-color: #1e2a35;
+            background: linear-gradient(160deg, #1e1b4b, #2d2870);
             font-size: 1.5rem;
-            color: #ffeaa7;
+            color: #e0ddff;
             justify-content: space-around;
             flex-direction: column;
             align-items: center;
+            border: 1px solid rgba(108, 99, 255, 0.3);
         }
 
         .result-board .options {
@@ -72,17 +75,30 @@
         .play-again-btn {
             background-color: transparent;
             padding: 0.3rem 0.6rem;
-            border: 1px solid #fdcb6e;
+            border: 1px solid #6C63FF;
+            border-radius: 4px;
             font-size: 1.2rem;
             font-family: cursive;
-            color: #f0f0f0;
+            color: #e0ddff;
             margin-right: 1rem;
             cursor: pointer;
             outline: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .play-again-btn:hover {
+            background-color: #6C63FF;
+            color: #fff;
         }
 
         .result-board .mode {
             cursor: pointer;
+            color: #a89cff;
+            transition: color 0.2s;
+        }
+
+        .result-board .mode:hover {
+            color: #fff;
         }
 
         .result-board .mode i {
@@ -91,10 +107,12 @@
 
         .result-board .score {
             font-size: 2rem;
+            color: #6C63FF;
+            text-shadow: 0 0 10px rgba(108, 99, 255, 0.7);
         }
 
         .square {
-            background-color: #263442;
+            background: linear-gradient(135deg, #1a1740, #211e58);
             cursor: pointer;
             width: calc(calc(100% / 3) - 0.2rem);
             height: calc(calc(100% / 3) - 0.2rem);
@@ -103,8 +121,13 @@
             justify-content: center;
             font-size: 5rem;
             font-family: 'Luckiest Guy', cursive;
+            border-radius: 6px;
+            transition: background 0.15s;
         }
 
+        .square:hover {
+            background: linear-gradient(135deg, #231f6a, #2e2a7a);
+        }
 
         @keyframes scaleUp {
             from {
@@ -127,18 +150,19 @@
         .brand span {
             font-size: 4rem;
             font-family: cursive;
+            text-shadow: 0 0 12px rgba(108, 99, 255, 0.6);
         }
 
         .brand span:nth-child(1) {
-            color: #fc5185;
+            color: #6C63FF;
         }
 
         .brand span:nth-child(2) {
-            color: #43dde6;
+            color: #a89cff;
         }
 
         .brand span:nth-child(3) {
-            color: #fdcb6e;
+            color: #FF6B9D;
         }
 
         @keyframes fade {
@@ -366,7 +390,7 @@
                     if (!board[x][y] && !finished) {
                         let player = players[turn % 2];
                         sqrt.innerHTML = `<p>${player.name}</p>`;
-                        sqrt.style.color = player.name === "X" ? "#43dde6" : "#fc5185";
+                        sqrt.style.color = player.name === "X" ? "#6C63FF" : "#FF6B9D";
                         const text = sqrt.firstChild;
                         text.style.animation = "0.2s ease scaleUp";
                         text.addEventListener('animationend', () => text.style.animation = "");
